@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Modi Suffers 3D Runner</title>
+    
+    <script type="importmap">
+      {
+        "imports": {
+          // YEH ASSUME KAR RAHA HAI KI aapki Three.js ki files 'js' folder mein hain
+          "three": "./js/three.module.js", 
+          "three/addons/": "./js/jsm/" 
+        }
+      }
+    </script>
+
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; }
+        #ui-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: yellow;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            z-index: 100;
+        }
+        #game-over-screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            z-index: 200;
+        }
+        #game-over-screen h1 { font-size: 48px; }
+        #game-over-screen p { font-size: 24px; }
+        #restart-button {
+            font-size: 24px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="ui-container">
+        <div id="score-display">Score: 0</div>
+        <div id="coin-display">Coins: 0</div>
+    </div>
+
+    <div id="game-over-screen">
+        <h1>Game Over</h1>
+        <p id="final-score">Score: 0</p>
+        <p id="final-coins">Coins: 0</p>
+        <button id="restart-button">Restart Game</button>
+    </div>
+
+    <audio id="jump-sound" src="path/to/jump.mp3" preload="auto"></audio>
+    <audio id="coin-sound" src="path/to/coin.mp3" preload="auto"></audio>
+    <audio id="crash-sound" src="path/to/crash.mp3" preload="auto"></audio>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
