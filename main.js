@@ -17,14 +17,17 @@ const crashSound = document.getElementById('crash-sound');
 let score = 0, coinCount = 0, isGameOver = false;
 const clock = new THREE.Clock();
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x111111);
-const renderer = new THREE.WebGLRenderer();
+scene.background = new THREE.Color(0x87CEEB); // Sky blue background to see the model better
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
 document.body.appendChild(renderer.domElement);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.y = 3;
-camera.position.z = 5;
+camera.position.set(0, 2, 4);
+camera.lookAt(0, 0.5, 0);
 
 // --- Game Constants ---
 let currentTrackSpeed = 0.2;
@@ -47,11 +50,15 @@ let isRolling = false, rollTimer = 0;
 player = new THREE.Group();
 player.position.y = playerGroundY;
 scene.add(player);
-camera.lookAt(new THREE.Vector3(0, player.position.y, 0));
 
 // --- Lighting ---
-scene.add(new THREE.AmbientLight(0x404040, 5));
-scene.add(new THREE.DirectionalLight(0xffffff, 3));
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+directionalLight.position.set(5, 10, 7);
+directionalLight.castShadow = false;
+scene.add(directionalLight);
 
 // --- GLTF Loader & DRACO Setup ---
 const gltfLoader = new GLTFLoader();
@@ -67,14 +74,41 @@ gltfLoader.load(
     function (gltf) {
         console.log("GLB model loaded successfully!");
         const model = gltf.scene; 
+        
+        // Debug: Log model information
+        console.log("Model children count:", model.children.length);
+        
+        // Ensure all materials use correct color space and log details
+        model.traverse((child) => {
+            if (child.isMesh) {
+                console.log("Found mesh:", child.name);
+                console.log("Material:", child.material);
+                
+                if (child.material) {
+                    // Log texture information
+                    if (child.material.map) {
+                        console.log("Has texture map:", child.material.map);
+                        child.material.map.colorSpace = THREE.SRGBColorSpace;
+                    } else {
+                        console.log("No texture map, color:", child.material.color);
+                    }
+                    child.material.needsUpdate = true;
+                }
+            }
+        });
+        
         model.rotation.y = Math.PI; 
         player.add(model);
         player.scale.set(playerNormalScale, playerNormalScale, playerNormalScale);
+        
+        console.log("Player position:", player.position);
+        console.log("Player scale:", player.scale);
         
         // Animation Setup
         mixer = new THREE.AnimationMixer(model);
         const animations = gltf.animations; 
         if (animations && animations.length) {
+            console.log("Found", animations.length, "animations");
             const runAction = mixer.clipAction(animations[0]); 
             runAction.play();
         }
@@ -139,6 +173,92 @@ function roll() {
 }
 window.addEventListener('touchstart', handleTouchStart);
 window.addEventListener('touchend', handleTouchEnd);
+
+// --- Keyboard Controls (for laptop/desktop) ---
+window.addEventListener('keydown', (event) => {
+    if (isGameOver) return;
+    
+    switch(event.key) {
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+            if (currentLane > 0) {
+                currentLane--;
+                targetLaneX = lanes[currentLane];
+            }
+            event.preventDefault();
+            break;
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
+            if (currentLane < 2) {
+                currentLane++;
+                targetLaneX = lanes[currentLane];
+            }
+            event.preventDefault();
+            break;
+        case 'ArrowUp':
+        case 'w':
+        case 'W':
+        case ' ':
+            jump();
+            event.preventDefault();
+            break;
+        case 'ArrowDown':
+        case 's':
+        case 'S':
+        case 'Shift':
+            roll();
+            event.preventDefault();
+            break;
+    }
+});
+
+// --- Mouse Controls (for laptop/desktop) ---
+let mouseStartX = 0, mouseStartY = 0, mouseEndX = 0, mouseEndY = 0;
+let isMouseDown = false;
+
+function handleMouseDown(event) {
+    isMouseDown = true;
+    mouseStartX = event.clientX;
+    mouseStartY = event.clientY;
+}
+
+function handleMouseUp(event) {
+    if (!isMouseDown) return;
+    isMouseDown = false;
+    mouseEndX = event.clientX;
+    mouseEndY = event.clientY;
+    handleMouseSwipe();
+}
+
+function handleMouseSwipe() {
+    if (isGameOver) return;
+    const swipeDistanceX = mouseEndX - mouseStartX;
+    const swipeDistanceY = mouseEndY - mouseStartY;
+    
+    // Require minimum distance for mouse swipes
+    if (Math.abs(swipeDistanceX) < 30 && Math.abs(swipeDistanceY) < 30) return;
+    
+    if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY)) {
+        if (swipeDistanceX > swipeThreshold && currentLane < 2) {
+            currentLane++;
+            targetLaneX = lanes[currentLane];
+        } else if (swipeDistanceX < -swipeThreshold && currentLane > 0) {
+            currentLane--;
+            targetLaneX = lanes[currentLane];
+        }
+    } else {
+        if (swipeDistanceY < -swipeThresholdY) {
+            jump();
+        } else if (swipeDistanceY > swipeThresholdY) {
+            roll();
+        }
+    }
+}
+
+window.addEventListener('mousedown', handleMouseDown);
+window.addEventListener('mouseup', handleMouseUp);
 
 
 // --- Obstacles & Coins ---
