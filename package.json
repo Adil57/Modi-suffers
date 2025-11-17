@@ -4,9 +4,11 @@
   "main": "main.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1", 
+    "test": "echo \\\"Error: no test specified\\\" && exit 1",
     "prebuild": "npm install -g @ionic/cli @capacitor/cli",
-    "build": "ionic capacitor build android --prod"
+    
+    // 👇 YAHAN HUMNE CHANGE KIYA HAI
+    "build": "cd workspace && ionic capacitor build android --prod"
   },
   "dependencies": {
     "three": "^0.181.1"
