@@ -12,5 +12,9 @@
   "cordova": {},
   "server": {
     "androidScheme": "https"
+  },
+  // 🎯 YEH BLOCK ADD KARO
+  "platforms": {
+    "android": {}
   }
 }
