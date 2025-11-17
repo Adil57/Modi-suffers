@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ModiSuffersGame</string>
+    <string name="title_activity_main">ModiSuffersGame</string>
+    <string name="package_name">com.modisuffers.game</string>
+    <string name="custom_url_scheme">com.modisuffers.game</string>
+</resources>

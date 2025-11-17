@@ -1,0 +1,4 @@
+include ':app'
+
+apply from: new File("../node_modules/@capacitor/android/capacitor.settings.gradle")
+include ':capacitor'
