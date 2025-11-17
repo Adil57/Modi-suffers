@@ -6,8 +6,6 @@
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm install -g @ionic/cli @capacitor/cli",
-    
-    // 👇 SIRF 'npx ionic...' COMMAND RAKHA GAYA HAI
     "build": "npx ionic capacitor build android --prod"
   },
   "dependencies": {
