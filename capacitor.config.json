@@ -13,7 +13,7 @@
   "server": {
     "androidScheme": "https"
   },
-  "android": {   <-- 🎯 YEH BLOCK ADD KARNA HAI
+  "android": {
     "path": "android"
   }
 }
