@@ -2,20 +2,14 @@
   "name": "workspace",
   "version": "1.0.0",
   "main": "main.js",
-  "scripts": {
+  "scripts": { // <--- Is block ke andar
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "npm install -g @ionic/cli @capacitor/cli", // <--- Nayi Line 1
+    "build": "ionic capacitor build android --prod"      // <--- Nayi Line 2
   },
   "dependencies": {
     "three": "^0.181.1"
   },
-  "devDependencies": {
-    "@capacitor/android": "^5.0.0",
-    "@capacitor/cli": "^5.0.0",
-    "@capacitor/core": "^5.0.0"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+// ... baaki file waise hi rahegi ...
 }
