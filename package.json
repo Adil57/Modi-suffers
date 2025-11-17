@@ -6,7 +6,9 @@
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm install -g @ionic/cli @capacitor/cli",
-    "build": "npx ionic capacitor build android --prod"
+    
+    // 👇 FINAL FIX: GO ONE LEVEL UP AND RUN COMMAND
+    "build": "cd .. && npx ionic capacitor build android --prod"
   },
   "dependencies": {
     "three": "^0.181.1"
