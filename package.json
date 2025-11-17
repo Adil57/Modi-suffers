@@ -6,7 +6,9 @@
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm install -g @ionic/cli @capacitor/cli",
-    "build": "cd workspace && ionic capacitor build android --prod"
+    
+    // 👇 YEH LINE DONO ERRORS THEEK KAREGI
+    "build": "cd workspace && npx ionic capacitor build android --prod"
   },
   "dependencies": {
     "three": "^0.181.1"
