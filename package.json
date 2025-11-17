@@ -6,11 +6,16 @@
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "three": "^0.181.1"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^5.0.0",  <-- 🎯 ADD THIS
+    "@capacitor/cli": "^5.0.0",      <-- 🎯 ADD THIS
+    "@capacitor/core": "^5.0.0"       <-- 🎯 ADD THIS
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "three": "^0.181.1"
-  }
+  "description": ""
 }
